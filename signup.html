@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>List Your Business — LifeHub Lagos</title>
+
+<meta name="description" content="Get verified and found by customers across Lagos. Join LifeHub's directory of trusted artisans.">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="List your work — LifeHub">
+<meta property="og:description" content="Free to list — get your work in front of customers across Lagos.">
+<meta property="og:image" content="https://gleaming-crumble-67d3e2.netlify.app/og-image.png">
+<meta property="og:url" content="https://gleaming-crumble-67d3e2.netlify.app/signup.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="List your work — LifeHub">
+<meta name="twitter:description" content="Free to list — get your work in front of customers across Lagos.">
+<meta name="twitter:image" content="https://gleaming-crumble-67d3e2.netlify.app/og-image.png">
+
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="favicon-32.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="navbar">
+    <a href="index.html" class="logo"><span class="logo-mark"></span>LifeHub</a>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html#services">Services</a>
+      <a href="index.html#how">How it works</a>
+      <a href="browse.html">Browse artisans</a>
+      <a href="index.html#launch">Lagos launch</a>
+      <a href="index.html#about">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="browse.html" class="btn-text">Find an artisan</a>
+      <a href="signup.html" class="btn btn-primary">List your work</a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="eyebrow-pin"><span class="dot"></span>For artisans in Lagos</div>
+      <h1>Get your work in front of people who need it.</h1>
+      <p class="lede">Fill this in once and your profile goes into our review queue. Once approved, customers across Lagos can find and reach out to you directly — no fees to get listed.</p>
+    </div>
+  </section>
+
+  <section class="form-section">
+    <div class="wrap">
+
+      <div id="formLayout" class="form-layout">
+
+        <form id="signupForm" class="form-card">
+
+          <div class="form-group">
+            <label for="fullName">Full name</label>
+            <input type="text" id="fullName" name="fullName" placeholder="e.g. Adaeze Okonkwo" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="phone">Phone / WhatsApp number</label>
+              <input type="tel" id="phone" name="phone" placeholder="080X XXX XXXX" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email <span class="optional">(optional)</span></label>
+              <input type="email" id="email" name="email" placeholder="you@example.com">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Trade</label>
+            <div class="chip-group" id="tradeChips">
+              <label class="chip-option"><input type="radio" name="trade" value="Carpenter" required><span>Carpenter</span></label>
+              <label class="chip-option"><input type="radio" name="trade" value="Electrician"><span>Electrician</span></label>
+              <label class="chip-option"><input type="radio" name="trade" value="Plumber"><span>Plumber</span></label>
+              <label class="chip-option"><input type="radio" name="trade" value="Tailor"><span>Tailor</span></label>
+              <label class="chip-option"><input type="radio" name="trade" value="Mechanic"><span>Mechanic</span></label>
+              <label class="chip-option"><input type="radio" name="trade" value="Painter"><span>Painter</span></label>
+              <label class="chip-option"><input type="radio" name="trade" value="Hairstylist"><span>Hairstylist</span></label>
+              <label class="chip-option"><input type="radio" name="trade" value="Crochet/Crafts"><span>Crochet/Crafts</span></label>
+              <label class="chip-option"><input type="radio" name="trade" value="Laptop sales &amp; repairs"><span>Laptop sales &amp; repairs</span></label>
+              <label class="chip-option"><input type="radio" name="trade" value="Typing &amp; printing"><span>Typing &amp; printing</span></label>
+              <label class="chip-option"><input type="radio" name="trade" value="Other" id="tradeOtherRadio"><span>Other</span></label>
+            </div>
+            <div class="form-group" id="tradeOtherWrap" style="display:none; margin-top:14px;">
+              <label for="tradeOtherInput">Please specify your trade</label>
+              <input type="text" id="tradeOtherInput" placeholder="e.g. Cake baker, phone repair, event decoration">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="area">Area in Lagos</label>
+              <input type="text" id="area" name="area" placeholder="e.g. Obadore, Ikeja, Yaba" required>
+            </div>
+            <div class="form-group">
+              <label for="experience">Years of experience</label>
+              <select id="experience" name="experience" required>
+                <option value="" disabled selected>Select</option>
+                <option>Less than 1 year</option>
+                <option>1–3 years</option>
+                <option>4–7 years</option>
+                <option>8+ years</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="bio">Tell customers about your work</label>
+            <textarea id="bio" name="bio" placeholder="What you do, what makes your work reliable, and the kind of jobs you take on." required></textarea>
+            <p class="field-hint">A couple of honest sentences works better than a sales pitch.</p>
+          </div>
+
+          <div class="form-group">
+            <label>Photos of your past work <span class="optional">(add at least 2)</span></label>
+            <div class="upload-zone" id="uploadZone">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M4 16v3a2 2 0 002 2h12a2 2 0 002-2v-3"/></svg>
+              <p><strong>Click to upload</strong> or drag photos here</p>
+              <input type="file" id="fileInput" accept="image/*" multiple>
+            </div>
+            <div class="preview-grid" id="previewGrid"></div>
+          </div>
+
+          <div class="form-submit-row">
+            <button type="submit" class="btn btn-primary btn-large">Submit for review</button>
+            <span class="form-note">We manually review every listing before it goes live.</span>
+          </div>
+
+        </form>
+
+        <aside class="form-side">
+          <div class="side-card">
+            <h4>Why list on LifeHub</h4>
+            <ul>
+              <li>Free to get listed — no commission on the work you do</li>
+              <li>Customers see your real work before they contact you</li>
+              <li>You set your own prices and terms directly with customers</li>
+            </ul>
+          </div>
+          <div class="side-card dark">
+            <h4>What happens next</h4>
+            <ul>
+              <li>We review your submission, usually within a couple of days</li>
+              <li>You'll get a message once your profile is live</li>
+              <li>Customers in your area can then find and contact you</li>
+            </ul>
+          </div>
+        </aside>
+
+      </div>
+
+      <div id="successState" class="success-state" style="display:none;">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        <h2>You're in the queue</h2>
+        <p>Thanks — we've received your details. We'll review your profile and reach out on the number you gave us once it's live.</p>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="index.html" class="logo"><span class="logo-mark"></span>LifeHub</a>
+        <p>One app for everyday life, starting with the people who keep your neighbourhood running.</p>
+      </div>
+
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h4>Services</h4>
+          <a href="browse.html">Artisans</a>
+          <a href="index.html#services">Jobs</a>
+          <a href="index.html#services">Buy &amp; sell</a>
+          <a href="index.html#services">Bill payments</a>
+        </div>
+        <div class="footer-col">
+          <h4>LifeHub</h4>
+          <a href="index.html#how">How it works</a>
+          <a href="signup.html">List your business</a>
+          <a href="contact.html">Contact</a>
+          <a href="index.html">About</a>
+        </div>
+        <div class="footer-col">
+          <h4>Get in touch</h4>
+          <a href="contact.html">Send a message</a>
+          <a href="#">Lagos, Nigeria</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 LifeHub. Built in Lagos.</span>
+      <span>Currently serving Lagos only.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="script.js"></script>
+<script src="signup.js"></script>
+
+</body>
+</html>

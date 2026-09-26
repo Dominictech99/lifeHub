@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+
+Sitemap: https://gleaming-crumble-67d3e2.netlify.app/sitemap.xml

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Browse Verified Artisans in Lagos — LifeHub</title>
+
+<meta name="description" content="Find trusted, verified artisans in Lagos — carpenters, electricians, tailors, plumbers, mechanics and more, with real reviews and portfolios. LifeHub Lagos artisans.">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Browse Verified Artisans in Lagos — LifeHub">
+<meta property="og:description" content="Find trusted, verified artisans in Lagos with real portfolios and reviews.">
+<meta property="og:image" content="https://gleaming-crumble-67d3e2.netlify.app/og-image.png">
+<meta property="og:url" content="https://gleaming-crumble-67d3e2.netlify.app/browse.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Browse Verified Artisans in Lagos — LifeHub">
+<meta name="twitter:description" content="Find trusted, verified artisans in Lagos with real portfolios and reviews.">
+<meta name="twitter:image" content="https://gleaming-crumble-67d3e2.netlify.app/og-image.png">
+
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="favicon-32.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="navbar">
+    <a href="index.html" class="logo"><span class="logo-mark"></span>LifeHub</a>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html#services">Services</a>
+      <a href="index.html#how">How it works</a>
+      <a href="browse.html">Browse artisans</a>
+      <a href="index.html#launch">Lagos launch</a>
+      <a href="index.html#about">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="signup.html" class="btn-text">List your business</a>
+      <a href="browse.html" class="btn btn-primary">Find an artisan</a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="eyebrow-pin"><span class="dot"></span>Now live across Lagos</div>
+      <h1>Find someone whose work you can actually see first.</h1>
+      <p class="lede">Every artisan here has been reviewed by us and has real photos of past jobs. Search by trade or area, then reach out directly.</p>
+
+      <div class="trust-strip">
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+          <span><strong>Personally reviewed</strong> — we check every artisan's work before listing them</span>
+        </div>
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a7 7 0 00-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 00-7-7z"/><circle cx="12" cy="9" r="2.3"/></svg>
+          <span><strong>Real photos</strong> — of actual past work, not stock images</span>
+        </div>
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span><strong>Something wrong?</strong> Report any listing directly to us</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="form-section">
+    <div class="wrap">
+
+      <div class="browse-controls">
+        <div class="search-input">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input type="text" id="searchInput" placeholder="Search by name, trade, or area…">
+        </div>
+      </div>
+
+      <div class="filter-chips" id="filterChips" style="margin-bottom:32px;">
+        <div class="filter-chip active" data-trade="All">All trades</div>
+        <div class="filter-chip" data-trade="Carpenter">Carpenter</div>
+        <div class="filter-chip" data-trade="Electrician">Electrician</div>
+        <div class="filter-chip" data-trade="Plumber">Plumber</div>
+        <div class="filter-chip" data-trade="Tailor">Tailor</div>
+        <div class="filter-chip" data-trade="Mechanic">Mechanic</div>
+        <div class="filter-chip" data-trade="Painter">Painter</div>
+        <div class="filter-chip" data-trade="Hairstylist">Hairstylist</div>
+        <div class="filter-chip" data-trade="Crochet/Crafts">Crochet/Crafts</div>
+        <div class="filter-chip" data-trade="Laptop sales &amp; repairs">Laptop sales &amp; repairs</div>
+        <div class="filter-chip" data-trade="Typing &amp; printing">Typing &amp; printing</div>
+      </div>
+
+      <div class="artisan-grid" id="artisanGrid"></div>
+
+    </div>
+  </section>
+
+  <section class="safety-section">
+    <div class="wrap">
+      <h2 class="heading-sm">Hiring safely</h2>
+      <div class="safety-grid">
+        <div class="safety-item">
+          <span class="safety-num">1</span>
+          <p>Agree on the price and scope of the job clearly before work starts</p>
+        </div>
+        <div class="safety-item">
+          <span class="safety-num">2</span>
+          <p>Ask to see more of their past work if you want extra confidence</p>
+        </div>
+        <div class="safety-item">
+          <span class="safety-num">3</span>
+          <p>Pay only once you're satisfied with the work, not fully upfront</p>
+        </div>
+        <div class="safety-item">
+          <span class="safety-num">4</span>
+          <p>Something feel off? <a href="contact.html">Report it to us</a> — we review every report</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="index.html" class="logo"><span class="logo-mark"></span>LifeHub</a>
+        <p>One app for everyday life, starting with the people who keep your neighbourhood running.</p>
+      </div>
+
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h4>Services</h4>
+          <a href="browse.html">Artisans</a>
+          <a href="index.html#services">Jobs</a>
+          <a href="index.html#services">Buy &amp; sell</a>
+          <a href="index.html#services">Bill payments</a>
+        </div>
+        <div class="footer-col">
+          <h4>LifeHub</h4>
+          <a href="index.html#how">How it works</a>
+          <a href="signup.html">List your business</a>
+          <a href="contact.html">Contact</a>
+          <a href="index.html">About</a>
+        </div>
+        <div class="footer-col">
+          <h4>Get in touch</h4>
+          <a href="contact.html">Send a message</a>
+          <a href="#">Lagos, Nigeria</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 LifeHub. Built in Lagos.</span>
+      <span>Currently serving Lagos only.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="script.js"></script>
+<script src="browse.js"></script>
+
+</body>
+</html>

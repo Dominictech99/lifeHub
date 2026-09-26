@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — LifeHub</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="favicon-32.png">
+<link rel="stylesheet" href="styles.css">
+<meta name="robots" content="noindex, nofollow">
+</head>
+<body>
+
+<div class="admin-shell">
+
+  <!-- LOGIN VIEW -->
+  <div id="loginView" class="admin-login-wrap">
+    <div class="login-card">
+      <h2>LifeHub Admin</h2>
+      <p class="lede-sm">Sign in to manage LifeHub.</p>
+
+      <div id="loginError" class="login-error"></div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="loginEmail">Email</label>
+          <input type="email" id="loginEmail" required>
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;">Sign in</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- DASHBOARD VIEW -->
+  <div id="dashboardView" style="display:none;">
+    <div class="wrap">
+      <div class="admin-header">
+        <h1>LifeHub Admin</h1>
+        <button id="signOutBtn" class="btn btn-secondary btn-small">Sign out</button>
+      </div>
+
+      <div class="admin-top-tabs" id="adminTopTabs">
+        <div class="admin-top-tab active" data-panel="artisans">Artisans</div>
+        <div class="admin-top-tab" data-panel="messages">Messages <span id="msgCount"></span></div>
+        <div class="admin-top-tab" data-panel="reviews">Reviews <span id="reviewCount"></span></div>
+        <div class="admin-top-tab" data-panel="leads">Leads <span id="leadCount"></span></div>
+      </div>
+
+      <!-- ARTISANS PANEL -->
+      <div class="admin-panel" id="panel-artisans">
+        <div class="status-tabs" id="statusTabs">
+          <div class="status-tab active" data-status="pending">Pending <span class="count" id="countPending"></span></div>
+          <div class="status-tab" data-status="approved">Verified <span class="count" id="countApproved"></span></div>
+          <div class="status-tab" data-status="rejected">Rejected <span class="count" id="countRejected"></span></div>
+          <div class="status-tab" data-status="all">All</div>
+        </div>
+        <div class="admin-list" id="adminList"></div>
+      </div>
+
+      <!-- MESSAGES PANEL -->
+      <div class="admin-panel" id="panel-messages" style="display:none;">
+        <div class="status-tabs" id="messageTabs">
+          <div class="status-tab active" data-type="all">All</div>
+          <div class="status-tab" data-type="general">General</div>
+          <div class="status-tab" data-type="report">Complaints/Reports</div>
+        </div>
+        <div class="admin-list" id="messageList"></div>
+      </div>
+
+      <!-- REVIEWS PANEL -->
+      <div class="admin-panel" id="panel-reviews" style="display:none;">
+        <div class="status-tabs" id="reviewTabs">
+          <div class="status-tab active" data-status="pending">Pending <span class="count" id="countReviewPending"></span></div>
+          <div class="status-tab" data-status="approved">Approved</div>
+          <div class="status-tab" data-status="rejected">Rejected</div>
+          <div class="status-tab" data-status="all">All</div>
+        </div>
+        <div class="admin-list" id="reviewList" style="padding-bottom:80px;"></div>
+      </div>
+
+      <!-- LEADS PANEL -->
+      <div class="admin-panel" id="panel-leads" style="display:none;">
+        <div class="status-tabs" id="leadTabs">
+          <div class="status-tab active" data-source="all">All</div>
+          <div class="status-tab" data-source="browse">From Browse</div>
+          <div class="status-tab" data-source="profile">From Profile</div>
+        </div>
+        <div id="leadSummary" style="margin-bottom:16px;"></div>
+        <div class="admin-list" id="leadList" style="padding-bottom:80px;"></div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="admin.js"></script>
+
+</body>
+</html>

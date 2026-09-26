@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact LifeHub — Lagos Artisan Directory</title>
+
+<meta name="description" content="Reach out to LifeHub or report a listing. Serving Lagos, Nigeria.">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Contact us — LifeHub">
+<meta property="og:description" content="Get in touch with LifeHub — questions, feedback, or partnership ideas welcome.">
+<meta property="og:image" content="https://gleaming-crumble-67d3e2.netlify.app/og-image.png">
+<meta property="og:url" content="https://gleaming-crumble-67d3e2.netlify.app/contact.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Contact us — LifeHub">
+<meta name="twitter:description" content="Get in touch with LifeHub — questions, feedback, or partnership ideas welcome.">
+<meta name="twitter:image" content="https://gleaming-crumble-67d3e2.netlify.app/og-image.png">
+
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="favicon-32.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="navbar">
+    <a href="index.html" class="logo"><span class="logo-mark"></span>LifeHub</a>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html#services">Services</a>
+      <a href="index.html#how">How it works</a>
+      <a href="browse.html">Browse artisans</a>
+      <a href="index.html#about">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="signup.html" class="btn-text">List your business</a>
+      <a href="browse.html" class="btn btn-primary">Find an artisan</a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="eyebrow-pin"><span class="dot"></span>We'd love to hear from you</div>
+      <h1>Questions, feedback, or ideas — send them our way.</h1>
+      <p class="lede">Whether you're a customer, an artisan, or just curious about LifeHub, drop us a message and we'll get back to you.</p>
+    </div>
+  </section>
+
+  <section class="form-section">
+    <div class="wrap">
+
+      <div id="formLayout" class="form-layout">
+
+        <form id="contactForm" class="form-card">
+
+          <div class="form-group">
+            <label for="contactName">Your name</label>
+            <input type="text" id="contactName" name="contactName" placeholder="e.g. Chinedu Obi" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="contactPhone">Phone / WhatsApp <span class="optional">(optional)</span></label>
+              <input type="tel" id="contactPhone" name="contactPhone" placeholder="080X XXX XXXX">
+            </div>
+            <div class="form-group">
+              <label for="contactEmail">Email <span class="optional">(optional)</span></label>
+              <input type="email" id="contactEmail" name="contactEmail" placeholder="you@example.com">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="contactMessage">Your message</label>
+            <textarea id="contactMessage" name="contactMessage" placeholder="What's on your mind?" required></textarea>
+          </div>
+
+          <div class="form-submit-row">
+            <button type="submit" class="btn btn-primary btn-large">Send message</button>
+            <span class="form-note">We usually reply within a couple of days.</span>
+          </div>
+
+        </form>
+
+        <aside class="form-side">
+          <div class="side-card">
+            <h4>Prefer WhatsApp?</h4>
+            <ul>
+              <li>Message us directly for a faster reply</li>
+              <li>Good for urgent questions about a listing or booking</li>
+            </ul>
+          </div>
+          <div class="side-card dark">
+            <h4>Are you an artisan?</h4>
+            <ul>
+              <li>Head to the signup page instead to get listed</li>
+              <li>This contact form is for general questions, not new listings</li>
+            </ul>
+          </div>
+        </aside>
+
+      </div>
+
+      <div id="successState" class="success-state" style="display:none;">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        <h2>Message sent</h2>
+        <p>Thanks for reaching out — we'll get back to you soon.</p>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="index.html" class="logo"><span class="logo-mark"></span>LifeHub</a>
+        <p>One app for everyday life, starting with the people who keep your neighbourhood running.</p>
+      </div>
+
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h4>Services</h4>
+          <a href="browse.html">Artisans</a>
+          <a href="index.html#services">Jobs</a>
+          <a href="index.html#services">Buy &amp; sell</a>
+          <a href="index.html#services">Bill payments</a>
+        </div>
+        <div class="footer-col">
+          <h4>LifeHub</h4>
+          <a href="index.html#how">How it works</a>
+          <a href="signup.html">List your business</a>
+          <a href="contact.html">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h4>Get in touch</h4>
+          <a href="contact.html">Send a message</a>
+          <a href="#">Lagos, Nigeria</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 LifeHub. Built in Lagos.</span>
+      <span>Currently serving Lagos only.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="script.js"></script>
+<script src="contact.js"></script>
+
+</body>
+</html>

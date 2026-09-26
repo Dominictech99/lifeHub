@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leave a review — LifeHub</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="favicon-32.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="navbar">
+    <a href="index.html" class="logo"><span class="logo-mark"></span>LifeHub</a>
+    <nav class="nav-links" id="navLinks">
+      <a href="browse.html">Browse artisans</a>
+      <a href="index.html#about">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="signup.html" class="btn-text">List your business</a>
+      <a href="browse.html" class="btn btn-primary">Find an artisan</a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="eyebrow-pin"><span class="dot"></span>Leave a review</div>
+      <h1 id="reviewHeading">How was your experience?</h1>
+      <p class="lede">Your review helps other customers trust the right artisan — and helps us keep quality high.</p>
+    </div>
+  </section>
+
+  <section class="form-section">
+    <div class="wrap" style="max-width:560px;">
+
+      <form id="reviewForm" class="form-card">
+        <input type="hidden" id="artisanId">
+
+        <div class="form-group">
+          <label>Your rating</label>
+          <div class="star-rating" id="starRating">
+            <button type="button" class="star" data-value="1">★</button>
+            <button type="button" class="star" data-value="2">★</button>
+            <button type="button" class="star" data-value="3">★</button>
+            <button type="button" class="star" data-value="4">★</button>
+            <button type="button" class="star" data-value="5">★</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="reviewerName">Your name</label>
+          <input type="text" id="reviewerName" placeholder="e.g. Ngozi Adeyemi" required>
+        </div>
+
+        <div class="form-group">
+          <label for="reviewComment">Your review <span class="optional">(optional)</span></label>
+          <textarea id="reviewComment" placeholder="What was it like working with them?"></textarea>
+        </div>
+
+        <div class="form-submit-row">
+          <button type="submit" class="btn btn-primary btn-large">Submit review</button>
+          <span class="form-note">Reviews are checked before going live.</span>
+        </div>
+      </form>
+
+      <div id="successState" class="success-state" style="display:none;">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        <h2>Thanks for the review</h2>
+        <p>We'll check it and get it live soon.</p>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-bottom">
+      <span>© 2026 LifeHub. Built in Lagos.</span>
+      <a href="index.html" style="color:var(--text-mute);">Back to LifeHub</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="script.js"></script>
+<script src="review.js"></script>
+
+</body>
+</html>
