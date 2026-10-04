@@ -36,6 +36,37 @@
 </head>
 <body>
 
+  <div id="announcementBanner" style="background:#1B2A4A; color:#FAF7F0; padding:10px 0; position:relative; overflow:hidden; white-space:nowrap;">
+  <div id="bannerTrack" style="display:inline-block; padding-left:100%; animation:scrollBanner 18s linear infinite;">
+    🎉 Happy New Month! LifeHub is growing — new verified artisans joining every week. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 🎉 Happy New Month! LifeHub is growing — new verified artisans joining every week.
+  </div>
+  <button id="closeBanner" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; color:#FAF7F0; font-size:18px; cursor:pointer; line-height:1; z-index:2;">&times;</button>
+</div>
+
+<style>
+@keyframes scrollBanner {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+</style>
+
+<script>
+(function () {
+  const banner = document.getElementById('announcementBanner');
+  const closeBtn = document.getElementById('closeBanner');
+  const bannerKey = 'lifehub-banner-dismissed';
+
+  if (sessionStorage.getItem(bannerKey)) {
+    banner.style.display = 'none';
+  }
+
+  closeBtn.addEventListener('click', () => {
+    banner.style.display = 'none';
+    sessionStorage.setItem(bannerKey, 'true');
+  });
+})();
+</script>
+
 <header class="site-header">
   <div class="navbar">
     <a href="#top" class="logo"><span class="logo-mark"></span>LifeHub</a>
