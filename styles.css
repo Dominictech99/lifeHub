@@ -1499,3 +1499,102 @@
 
   .badge-report{ background:#FDEDED; color:#B4232C; }
   .badge-general{ background:rgba(27,42,74,0.07); color:var(--ink-soft); }
+
+  /* Add to the bottom of styles.css */
+.founding-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:linear-gradient(135deg,#F5A623,#F7C566);
+  color:#1B2A4A;font-weight:700;font-size:13px;
+  padding:5px 12px;border-radius:999px;margin:6px 0;
+}
+.founding-badge svg{width:14px;height:14px;flex:none}
+
+/* Add to the bottom of styles.css */
+.live-badge{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#1F6F54;margin:4px 0 4px 8px}
+.live-dot{width:9px;height:9px;border-radius:50%;background:#1F6F54;box-shadow:0 0 0 0 rgba(31,111,84,.5);animation:livepulse 1.6s infinite}
+@keyframes livepulse{70%{box-shadow:0 0 0 8px rgba(31,111,84,0)}100%{box-shadow:0 0 0 0 rgba(31,111,84,0)}}
+
+.logo-img{height:32px;width:auto;margin-right:8px;vertical-align:middle}
+
+/* Add to the bottom of styles.css — loading placeholders */
+.sk{background:linear-gradient(90deg,#e9e6dd 25%,#f4f1e8 37%,#e9e6dd 63%);background-size:400% 100%;animation:skshimmer 1.4s ease infinite;border-radius:10px}
+.sk-photo{height:170px;border-radius:12px;margin-bottom:6px}
+.sk-line{height:14px;margin:12px 0}
+.sk-w40{width:40%}.sk-w60{width:60%}.sk-w80{width:80%}
+.sk-btn{height:44px;border-radius:999px;margin-top:16px}
+.skeleton-card{pointer-events:none}
+@keyframes skshimmer{0%{background-position:100% 50%}100%{background-position:0 50%}}
+@media (prefers-reduced-motion:reduce){.sk{animation:none}}
+/* ---------- MOBILE POLISH ---------- */
+
+/* Stops the page from sliding sideways on phones */
+html, body{ overflow-x:hidden; }
+
+@media (max-width:860px){
+  .wrap{ padding:0 20px; }
+  .navbar{ padding:12px 20px; }
+  nav.nav-links{ padding:18px 20px; gap:4px; }
+  nav.nav-links a{ display:block; width:100%; padding:12px 0; font-size:16px; }
+  .menu-toggle{ padding:13px 10px; }
+  .nav-actions{ gap:8px; }
+  .nav-actions .btn{ padding:10px 14px; font-size:13.5px; }
+
+  /* hero: message first, mosaic after, nothing wider than the screen */
+  .hero{ padding:36px 0 56px; }
+  .hero .wrap > div, .hero .wrap{ min-width:0; }
+  .mosaic{ order:0; grid-template-columns:repeat(4, minmax(0,1fr)); grid-template-rows:repeat(4, 54px); gap:8px; }
+  .tile{ min-width:0; padding:10px; }
+  .tile-tag{ font-size:11px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:100%; }
+  .hero h1{ font-size:32px; max-width:100%; }
+  .hero p.lede{ font-size:16.5px; max-width:100%; }
+  .hero-ctas .btn{ width:100%; }
+  .hero-note{ font-size:14px; }
+
+  .services, .how, .about-section{ padding:56px 0; }
+  .section-head{ margin-bottom:32px; }
+  .section-head h2{ font-size:28px; }
+  .service-cell{ padding:26px 22px; min-height:0; }
+  .how-grid{ margin-top:32px; }
+  .about-card{ padding:24px; }
+
+  .launch{ padding:30px 22px; margin-bottom:56px; }
+  .launch .btn{ width:100%; }
+
+  .page-hero{ padding:36px 0 28px; }
+  .page-hero h1{ font-size:30px; }
+  .form-section{ padding:36px 0 64px; }
+
+  /* footer links easy to tap */
+  .footer-cols{ gap:32px 40px; }
+  .footer-col a{ padding:6px 0; margin-bottom:2px; font-size:15px; }
+  .footer-bottom a{ display:inline-block; padding:6px 0; }
+  .footer-bottom{ font-size:14px; }
+}
+
+@media (max-width:560px){
+  .form-card{ padding:20px; }
+  .form-submit-row{ flex-wrap:wrap; }
+  .form-submit-row .btn{ width:100%; }
+
+  /* 16px text stops iPhones zooming in when a field is tapped */
+  input[type="text"], input[type="tel"], input[type="email"], select, textarea{
+    font-size:16px;
+    padding:14px;
+  }
+  .chip-option span{ padding:11px 16px; font-size:14.5px; }
+  .filter-chips{ gap:10px; }
+  .filter-chip{ padding:11px 16px; font-size:14px; }
+  .search-input input{ padding-left:42px; }
+
+  .artisan-top{ flex-wrap:wrap; }
+  .artisan-body{ padding:18px; }
+  .artisan-meta{ font-size:14px; }
+  .artisan-bio{ font-size:14.5px; }
+  .artisan-contact{ padding:14px; font-size:15.5px; }
+  .review-link, .report-link{ display:block; margin:0; padding:10px 0 2px; font-size:14px; }
+  .btn-text{ padding:8px 0; }
+
+  .status-tabs, .admin-top-tabs{ flex-wrap:wrap; overflow-x:auto; }
+  .admin-actions .btn{ flex:1 1 auto; }
+  .legal{ font-size:16px; }
+}

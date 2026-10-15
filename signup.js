@@ -31,12 +31,50 @@
     handleFiles(e.target.files);
   });
 
-  function handleFiles(fileList) {
-    Array.from(fileList).forEach((file) => {
-      if (!file.type.startsWith('image/')) return;
+  const MAX_PHOTOS = 8;
+  const MAX_SIDE = 1280;      // longest side in pixels
+  const JPEG_QUALITY = 0.8;
+  const SKIP_UNDER = 250 * 1024; // small files are left alone
+
+  // Shrinks big phone photos in the browser so uploads are fast on slow data.
+  // If anything goes wrong, the original photo is used instead.
+  async function compressImage(file) {
+    try {
+      if (file.size <= SKIP_UNDER && /jpeg|jpg|webp/.test(file.type)) return file;
+      const bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' });
+      const scale = Math.min(1, MAX_SIDE / Math.max(bitmap.width, bitmap.height));
+      const w = Math.round(bitmap.width * scale);
+      const h = Math.round(bitmap.height * scale);
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, w, h);
+      ctx.drawImage(bitmap, 0, 0, w, h);
+      if (bitmap.close) bitmap.close();
+      const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', JPEG_QUALITY));
+      if (!blob || blob.size >= file.size) return file; // never make it bigger
+      const name = file.name.replace(/\.[^.]+$/, '') + '.jpg';
+      return new File([blob], name, { type: 'image/jpeg' });
+    } catch (err) {
+      console.warn('Could not compress photo, using original:', err);
+      return file;
+    }
+  }
+
+  async function handleFiles(fileList) {
+    const files = Array.from(fileList).filter((f) => f.type.startsWith('image/'));
+    for (const original of files) {
+      if (selectedFiles.length >= MAX_PHOTOS) {
+        alert(`You can add up to ${MAX_PHOTOS} photos.`);
+        break;
+      }
+      const file = await compressImage(original);
       selectedFiles.push(file);
       renderThumb(file);
-    });
+    }
+    fileInput.value = ''; // lets the same photo be chosen again after removing it
   }
 
   function renderThumb(file) {
@@ -85,7 +123,7 @@
       const { error: uploadError } = await supabaseClient
         .storage
         .from('artisan-photos')
-        .upload(path, file);
+        .upload(path, file, { contentType: file.type || 'image/jpeg', cacheControl: '31536000' });
 
       if (uploadError) throw uploadError;
 

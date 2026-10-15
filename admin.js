@@ -137,7 +137,7 @@
       const safePhone = escapeHtml(a.phone);
       const safeEmail = a.email ? escapeHtml(a.email) : '';
       const safeBio = escapeHtml(a.bio);
-      const safeStatusLabel = escapeHtml(statusLabels[a.status] || a.status);
+      const safeStatusLabel = escapeHtml(a.status === 'approved' && a.founding_number ? `Founding #${a.founding_number}` : (statusLabels[a.status] || a.status));
 
       const row = document.createElement('div');
       row.className = 'admin-row';
@@ -150,11 +150,13 @@
           <h3>${safeName} · ${safeTrade}</h3>
           <div class="admin-meta">${safeArea} · ${safeYears} · ${safePhone}${safeEmail ? ' · ' + safeEmail : ''}</div>
           <p class="admin-bio">${safeBio}</p>
+          ${photos.length < 3 ? `<p style="color:#b45309;font-weight:600;margin-top:6px;">⚠ Only ${photos.length} photo${photos.length === 1 ? '' : 's'} (LifeHub needs at least 3 before approval)</p>` : ''}
         </div>
         <div class="admin-actions">
           ${a.status !== 'approved' ? `<button class="btn btn-small btn-approve" data-id="${a.id}" data-action="approved">Approve</button>` : ''}
           ${a.status !== 'rejected' ? `<button class="btn btn-small btn-reject" data-id="${a.id}" data-action="rejected">Reject</button>` : ''}
           ${a.status !== 'pending' ? `<button class="btn btn-small btn-reject" data-id="${a.id}" data-action="pending">Back to pending</button>` : ''}
+          ${a.status === 'approved' ? `<button class="btn btn-small btn-approve" data-id="${a.id}" data-action="copylink">Copy availability link</button>` : ''}
           <button class="btn btn-small btn-delete" data-id="${a.id}" data-action="delete">Delete</button>
         </div>
       `;
@@ -170,6 +172,17 @@
     const action = btn.dataset.action;
     btn.disabled = true;
 
+    if (action === 'copylink') {
+      const { data: tk, error: tkErr } = await supabaseClient
+        .from('artisan_tokens').select('token').eq('artisan_id', id).single();
+      btn.disabled = false;
+      if (tkErr || !tk) { alert('Could not find a link for this artisan. Did you run availability.sql?'); return; }
+      const link = `${location.origin}/available.html?t=${tk.token}`;
+      try { await navigator.clipboard.writeText(link); alert('Link copied. Send it to the artisan on WhatsApp:\n\n' + link); }
+      catch (e2) { prompt('Copy this link and send it to the artisan:', link); }
+      return;
+    }
+
     if (action === 'delete') {
       if (!confirm('Delete this submission permanently?')) {
         btn.disabled = false;
@@ -178,6 +191,14 @@
       const { error } = await supabaseClient.from('artisans').delete().eq('id', id);
       if (error) { alert('Delete failed: ' + error.message); btn.disabled = false; return; }
     } else {
+      if (action === 'approved') {
+        const person = allArtisans.find((x) => String(x.id) === String(id));
+        const count = person && person.photo_urls ? person.photo_urls.length : 0;
+        if (count < 3 && !confirm(`This artisan has only ${count} photo(s). LifeHub needs at least 3 before approving.\n\nApprove anyway?`)) {
+          btn.disabled = false;
+          return;
+        }
+      }
       const { error } = await supabaseClient.from('artisans').update({ status: action }).eq('id', id);
       if (error) { alert('Update failed: ' + error.message); btn.disabled = false; return; }
     }

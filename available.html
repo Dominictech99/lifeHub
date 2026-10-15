@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Your availability — LifeHub</title>
+<style>
+  :root{--ink:#1B2A4A;--marigold:#F5A623;--paper:#FAF7F0;--leaf:#1F6F54}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--paper);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,sans-serif;padding:20px}
+  .card{background:#fff;border-radius:18px;padding:28px 22px;max-width:420px;width:100%;box-shadow:0 10px 30px rgba(27,42,74,.12);text-align:center}
+  h1{font-size:22px;margin:0 0 6px} p{margin:0 0 18px;color:#3A4A6B;line-height:1.45}
+  .status{display:inline-flex;align-items:center;gap:8px;font-weight:700;padding:8px 14px;border-radius:999px;background:#eceff5;margin-bottom:20px}
+  .status.on{background:#dff3ea;color:var(--leaf)}
+  .dot{width:10px;height:10px;border-radius:50%;background:#9aa5bb}.on .dot{background:var(--leaf);box-shadow:0 0 0 4px rgba(31,111,84,.2)}
+  button{display:block;width:100%;border:0;border-radius:999px;padding:15px;font-size:16px;font-weight:700;cursor:pointer;margin-top:10px;font-family:inherit}
+  .go{background:var(--marigold);color:var(--ink)} .off{background:#eceff5;color:var(--ink)}
+  button:disabled{opacity:.6}
+  small{display:block;margin-top:16px;color:#6a7790}
+</style>
+</head>
+<body>
+<div class="card" id="card"><p>Loading…</p></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script>
+(function () {
+  const card = document.getElementById('card');
+  const token = new URLSearchParams(location.search).get('t');
+  let name = '', until = null;
+
+  function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  function active(){return until && new Date(until).getTime() > Date.now();}
+
+  function draw(msg) {
+    const on = active();
+    const time = on ? new Date(until).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'}) : '';
+    card.innerHTML = `
+      <h1>Hello, ${esc(name.split(' ')[0])} 👋</h1>
+      <p>Tell customers on LifeHub when you can take jobs. Available artisans show first when people search.</p>
+      <div class="status ${on?'on':''}"><span class="dot"></span>${on ? 'You are showing as available until ' + time : 'You are showing as not available'}</div>
+      <button class="go" id="goBtn">${on ? 'Keep me available for 4 more hours' : "I'm available now"}</button>
+      ${on ? '<button class="off" id="offBtn">I&#39;m not available</button>' : ''}
+      <small>${esc(msg || 'Your status switches off by itself after 4 hours, so customers never reach you when you are busy.')}</small>`;
+    document.getElementById('goBtn').onclick = () => set(true);
+    const off = document.getElementById('offBtn'); if (off) off.onclick = () => set(false);
+  }
+
+  async function set(v) {
+    document.querySelectorAll('button').forEach(b => b.disabled = true);
+    const { data, error } = await supabaseClient.rpc('set_availability', { p_token: token, p_available: v, p_hours: 4 });
+    if (error) { draw('Something went wrong. Check your network and try again.'); return; }
+    until = data; draw();
+  }
+
+  async function init() {
+    if (!token) { card.innerHTML = '<h1>Link not valid</h1><p>Please use the link LifeHub sent you.</p>'; return; }
+    const { data, error } = await supabaseClient.rpc('get_availability', { p_token: token });
+    if (error || !data || !data.length) { card.innerHTML = '<h1>Link not valid</h1><p>Please use the link LifeHub sent you.</p>'; return; }
+    name = data[0].full_name; until = data[0].available_until; draw();
+  }
+  init();
+})();
+</script>
+</body>
+</html>

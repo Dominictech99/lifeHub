@@ -1,0 +1,33 @@
+{
+  "id": "./",
+  "name": "LifeHub",
+  "short_name": "LifeHub",
+  "description": "Find trusted, verified artisans across Lagos with real photos and reviews.",
+  "start_url": "./?source=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FAF7F0",
+  "theme_color": "#1B2A4A",
+  "lang": "en-NG",
+  "categories": ["lifestyle", "business", "utilities"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Browse artisans",
+      "short_name": "Browse",
+      "url": "browse.html",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "List your business",
+      "short_name": "List",
+      "url": "signup.html",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    }
+  ]
+}

@@ -30,6 +30,9 @@
   gtag('js', new Date());
   gtag('config', 'G-Y5D6JKDTE5');
 </script>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1B2A4A">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 </head>
 <body>
 
@@ -92,6 +95,7 @@
       </div>
 
       <div class="filter-chips" id="filterChips" style="margin-bottom:32px;">
+        <div class="filter-chip" data-available="1">● Available now</div>
         <div class="filter-chip active" data-trade="All">All trades</div>
         <div class="filter-chip" data-trade="Carpenter">Carpenter</div>
         <div class="filter-chip" data-trade="Electrician">Electrician</div>
@@ -140,7 +144,7 @@
   <div class="wrap">
     <div class="footer-top">
       <div class="footer-brand">
-        <a href="index.html" class="logo"><span class="logo-mark"></span>LifeHub</a>
+        <a href="index.html" class="logo"><img src="logo-mark.png" alt="" class="logo-img">LifeHub</a>
         <p>One app for everyday life, starting with the people who keep your neighbourhood running.</p>
       </div>
 
@@ -169,7 +173,7 @@
 
     <div class="footer-bottom">
       <span>© 2026 LifeHub. Built in Lagos.</span>
-      <span>Currently serving Lagos only.</span>
+      <span><a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Use</a> · Currently serving Lagos only.</span>
     </div>
   </div>
 </footer>
@@ -179,5 +183,6 @@
 <script src="script.js"></script>
 <script src="browse.js"></script>
 
+<script src="pwa.js" defer></script>
 </body>
 </html>

@@ -7,6 +7,11 @@
   let ratingsByArtisan = {};
   let activeTrade = 'All';
   let query = '';
+  let onlyAvailable = false;
+
+  function isAvailable(a) {
+    return !!a.available_until && new Date(a.available_until).getTime() > Date.now();
+  }
 
   function escapeHtml(str) {
     if (str === null || str === undefined) return '';
@@ -18,8 +23,42 @@
       .replace(/'/g, '&#39;');
   }
 
+  // Turns 0803 123 4567 / +234 803... / 234803... into a number WhatsApp accepts
+  function waNumber(raw) {
+    let d = String(raw || '').replace(/\D/g, '');
+    if (d.startsWith('00')) d = d.slice(2);
+    if (d.startsWith('0')) d = '234' + d.slice(1);
+    else if (d.length === 10) d = '234' + d;
+    return d;
+  }
+
+  function waLink(phone, firstName, trade) {
+    const who = firstName ? `Hi ${firstName}` : 'Hi';
+    const what = trade ? ` I need a ${String(trade).toLowerCase()} and` : '';
+    const text = `${who}, I found you on LifeHub.${what} I'd like to ask if you're available.`;
+    return `https://wa.me/${waNumber(phone)}?text=${encodeURIComponent(text)}`;
+  }
+
+  // Founding Artisan (first 50) or Verified badge
+  function badgeHtml(a) {
+    if (a.founding_number) {
+      return `<div class="founding-badge" title="One of the first 50 artisans on LifeHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z"/></svg>Founding Artisan #${Number(a.founding_number)}</div>`;
+    }
+    return `<div class="verified-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>Verified by LifeHub</div>`;
+  }
+
   async function loadArtisans() {
-    grid.innerHTML = `<div class="empty-state"><h3>Loading artisans…</h3></div>`;
+    grid.innerHTML = Array.from({ length: 6 }, () => `
+      <div class="artisan-card skeleton-card" aria-hidden="true">
+        <div class="sk-photo sk"></div>
+        <div class="artisan-body">
+          <div class="sk sk-line sk-w60"></div>
+          <div class="sk sk-line sk-w40"></div>
+          <div class="sk sk-line"></div>
+          <div class="sk sk-line sk-w80"></div>
+          <div class="sk sk-btn"></div>
+        </div>
+      </div>`).join('');
 
     const { data, error } = await supabaseClient
       .from('artisans')
@@ -31,8 +70,9 @@
       console.error('Failed to load artisans:', error);
       grid.innerHTML = `
         <div class="empty-state">
-          <h3>Couldn't load artisans</h3>
-          <p>Check your connection and refresh the page.</p>
+          <h3>We couldn't load the artisans</h3>
+          <p>Your network might be slow. Please check your data or Wi-Fi and try again.</p>
+          <button class="btn btn-secondary" type="button" onclick="location.reload()">Try again</button>
         </div>`;
       return;
     }
@@ -73,16 +113,25 @@
       const matchesTrade = activeTrade === 'All' || a.trade === activeTrade;
       const haystack = `${a.full_name} ${a.trade} ${a.area}`.toLowerCase();
       const matchesQuery = haystack.includes(query.toLowerCase());
-      return matchesTrade && matchesQuery;
+      const matchesAvail = !onlyAvailable || isAvailable(a);
+      return matchesTrade && matchesQuery && matchesAvail;
     });
+
+    // people who are available right now come first
+    filtered.sort((x, y) => Number(isAvailable(y)) - Number(isAvailable(x)));
 
     grid.innerHTML = '';
 
     if (filtered.length === 0) {
       grid.innerHTML = `
         <div class="empty-state">
-          <h3>No artisans match yet</h3>
-          <p>Try a different trade or search term — we're adding more people across Lagos every week.</p>
+          <h3>${allArtisans.length === 0 ? 'Artisans are joining soon' : 'No one matches that yet'}</h3>
+          <p>${allArtisans.length === 0
+            ? "We're adding trusted artisans across Lagos every week. Check back soon, or tell us what you need."
+            : onlyAvailable
+              ? 'No one has marked themselves available right now. Turn off "Available now" to see everyone.'
+              : 'Try another trade or a different word. New artisans join every week.'}</p>
+          <a href="contact.html" class="btn btn-secondary">Tell us what you need</a>
         </div>`;
       return;
     }
@@ -123,14 +172,12 @@
             <h3>${safeName}</h3>
             <span class="trade-tag">${safeTrade}</span>
           </div>
-          <div class="verified-badge">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
-            Verified by LifeHub
-          </div>
+          ${badgeHtml(a)}
+          ${isAvailable(a) ? '<div class="live-badge"><span class="live-dot"></span>Available now</div>' : ''}
           ${ratingHtml}
           <div class="artisan-meta">${safeArea} · ${safeYears}</div>
           <p class="artisan-bio">${safeBio}</p>
-          <button class="btn btn-secondary artisan-contact" type="button" data-phone="${safePhone}" data-artisan-id="${escapeHtml(a.id)}">Contact ${safeFirstName}</button>
+          <button class="btn btn-secondary artisan-contact" type="button" data-phone="${safePhone}" data-first-name="${safeFirstName}" data-trade="${safeTrade}" data-artisan-id="${escapeHtml(a.id)}">Contact ${safeFirstName}</button>
           <a href="artisan.html?id=${encodeURIComponent(a.id)}" class="review-link">View full profile</a>
           <a href="review.html?artisan_id=${encodeURIComponent(a.id)}&artisan_name=${encodeURIComponent(a.full_name || '')}" class="review-link">Leave a review</a>
           <a href="contact.html?report=${encodeURIComponent(a.full_name || '')}" class="report-link">Report this listing</a>
@@ -153,14 +200,20 @@
       supabaseClient.from('leads').insert({ artisan_id: artisanId, source_page: 'browse' }).then(() => {});
     }
     if (phone) {
-      window.open(`https://wa.me/${phone.replace(/\D/g, '')}`, '_blank');
+      window.open(waLink(phone, btn.dataset.firstName, btn.dataset.trade), '_blank');
     }
   });
 
   filterChips.addEventListener('click', (e) => {
     const chip = e.target.closest('.filter-chip');
     if (!chip) return;
-    filterChips.querySelectorAll('.filter-chip').forEach((c) => c.classList.remove('active'));
+    if (chip.dataset.available) {
+      onlyAvailable = !onlyAvailable;
+      chip.classList.toggle('active', onlyAvailable);
+      render();
+      return;
+    }
+    filterChips.querySelectorAll('.filter-chip:not([data-available])').forEach((c) => c.classList.remove('active'));
     chip.classList.add('active');
     activeTrade = chip.dataset.trade;
     render();
