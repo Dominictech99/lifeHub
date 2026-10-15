@@ -1598,3 +1598,22 @@ html, body{ overflow-x:hidden; }
   .admin-actions .btn{ flex:1 1 auto; }
   .legal{ font-size:16px; }
 }
+
+/* Header: keep links on one line so nothing overlaps the logo */
+nav.nav-links a, .nav-actions a, .nav-actions .btn{ white-space:nowrap; }
+.navbar{ gap:24px; }
+nav.nav-links{ gap:28px; }
+
+/* Tablets and small laptops: use the menu button so the header never gets crowded */
+@media (max-width:1100px){
+  nav.nav-links{
+    position:absolute; top:100%; left:0; right:0;
+    background:var(--paper); border-bottom:1px solid var(--line);
+    flex-direction:column; align-items:flex-start;
+    padding:18px 32px; gap:4px; display:none;
+  }
+  nav.nav-links.open{ display:flex; }
+  nav.nav-links a{ display:block; width:100%; padding:12px 0; font-size:16px; }
+  .menu-toggle{ display:flex; padding:13px 10px; }
+  .nav-actions .btn-text{ display:none; }
+}

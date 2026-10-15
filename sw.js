@@ -4,18 +4,18 @@
  * - Never touches other sites (Supabase, Google Analytics, CDNs) or the admin page
  * Bump VERSION whenever you deploy changes so visitors get fresh files.
  */
-const VERSION = "lifehub-v4";
+const VERSION = 'lifehub-v6';
 
 const PRECACHE = [
-  "./",
-  "browse.html",
-  "signup.html",
-  "contact.html",
-  "styles.css",
-  "script.js",
-  "browse.js",
-  "supabase-config.js",
-  "icons/icon-192.png",
+  './',
+  'browse.html',
+  'signup.html',
+  'contact.html',
+  'styles.css',
+  'script.js',
+  'browse.js',
+  'supabase-config.js',
+  'icons/icon-192.png'
 ];
 
 const OFFLINE_HTML = `<!DOCTYPE html>
@@ -34,40 +34,32 @@ const OFFLINE_HTML = `<!DOCTYPE html>
   <button onclick="location.reload()">Try again</button>
 </div></body></html>`;
 
-self.addEventListener("install", (event) => {
+self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches
-      .open(VERSION)
-      .then((cache) =>
-        // add files one by one so a single missing file never blocks the install
-        Promise.all(PRECACHE.map((url) => cache.add(url).catch(() => null))),
-      )
-      .then(() => self.skipWaiting()),
+    caches.open(VERSION).then((cache) =>
+      // add files one by one so a single missing file never blocks the install
+      Promise.all(PRECACHE.map((url) => cache.add(url).catch(() => null)))
+    ).then(() => self.skipWaiting())
   );
 });
 
-self.addEventListener("activate", (event) => {
+self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches
-      .keys()
-      .then((keys) =>
-        Promise.all(
-          keys.filter((k) => k !== VERSION).map((k) => caches.delete(k)),
-        ),
-      )
-      .then(() => self.clients.claim()),
+    caches.keys()
+      .then((keys) => Promise.all(keys.filter((k) => k !== VERSION).map((k) => caches.delete(k))))
+      .then(() => self.clients.claim())
   );
 });
 
-self.addEventListener("fetch", (event) => {
+self.addEventListener('fetch', (event) => {
   const req = event.request;
-  if (req.method !== "GET") return;
+  if (req.method !== 'GET') return;
 
   const url = new URL(req.url);
-  if (url.origin !== self.location.origin) return; // leave Supabase, GA, CDNs alone
-  if (url.pathname.includes("admin")) return; // never cache the admin dashboard
+  if (url.origin !== self.location.origin) return;      // leave Supabase, GA, CDNs alone
+  if (url.pathname.includes('admin')) return;            // never cache the admin dashboard
 
-  if (req.mode === "navigate") {
+  if (req.mode === 'navigate') {
     event.respondWith(
       fetch(req)
         .then((res) => {
@@ -76,16 +68,10 @@ self.addEventListener("fetch", (event) => {
           return res;
         })
         .catch(() =>
-          caches
-            .match(req)
-            .then(
-              (hit) =>
-                hit ||
-                new Response(OFFLINE_HTML, {
-                  headers: { "Content-Type": "text/html; charset=utf-8" },
-                }),
-            ),
-        ),
+          caches.match(req).then((hit) =>
+            hit || new Response(OFFLINE_HTML, { headers: { 'Content-Type': 'text/html; charset=utf-8' } })
+          )
+        )
     );
     return;
   }
@@ -102,6 +88,6 @@ self.addEventListener("fetch", (event) => {
         })
         .catch(() => cached);
       return cached || refresh;
-    }),
+    })
   );
 });
