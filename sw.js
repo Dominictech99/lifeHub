@@ -4,7 +4,7 @@
  * - Never touches other sites (Supabase, Google Analytics, CDNs) or the admin page
  * Bump VERSION whenever you deploy changes so visitors get fresh files.
  */
-const VERSION = 'lifehub-v6';
+const VERSION = 'lifehub-v7';
 
 const PRECACHE = [
   './',
@@ -57,7 +57,7 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;      // leave Supabase, GA, CDNs alone
-  if (url.pathname.includes('admin')) return;            // never cache the admin dashboard
+  if (url.pathname.includes('admin') || url.pathname.includes('dashboard')) return;  // never cache admin or artisan dashboards
 
   if (req.mode === 'navigate') {
     event.respondWith(

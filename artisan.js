@@ -110,7 +110,8 @@
       <div class="artisan-grid" style="margin-top:24px;">${photosHtml}</div>
 
       <div style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;">
-        <button class="btn btn-secondary" id="contactBtn" data-phone="${safePhone}">Contact ${escapeHtml((a.full_name || '').split(' ')[0])}</button>
+        <button class="btn btn-primary" id="chatBtn" type="button">Chat with ${escapeHtml((a.full_name || '').split(' ')[0])}</button>
+        <button class="btn btn-secondary" id="contactBtn" data-phone="${safePhone}">WhatsApp ${escapeHtml((a.full_name || '').split(' ')[0])}</button>
         <button class="btn btn-text" id="shareBtn">Share this profile</button>
         <a href="review.html?artisan_id=${encodeURIComponent(a.id)}&artisan_name=${encodeURIComponent(a.full_name || '')}" class="btn btn-text">Leave a review</a>
       </div>
@@ -118,6 +119,10 @@
       <h2 class="heading-sm" style="margin-top:40px;">Reviews</h2>
       <div class="safety-grid">${reviewsHtml || '<p>No reviews yet.</p>'}</div>
     `;
+
+    document.getElementById('chatBtn').addEventListener('click', () => {
+      if (window.LifeHubChat) LifeHubChat.open({ artisanId: a.id, artisanName: a.full_name });
+    });
 
     document.getElementById('contactBtn').addEventListener('click', () => {
       supabaseClient.from('leads').insert({ artisan_id: a.id, source_page: 'profile' }).then(() => {});

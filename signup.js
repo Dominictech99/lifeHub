@@ -137,6 +137,35 @@
     return urls;
   }
 
+  // artisans log in with their phone number; behind the scenes it becomes a private sign-in name
+  function waNumber(raw) {
+    let d = String(raw || '').replace(/\D/g, '');
+    if (d.startsWith('00')) d = d.slice(2);
+    if (d.startsWith('0')) d = '234' + d.slice(1);
+    else if (d.length === 10) d = '234' + d;
+    return d;
+  }
+  function authEmail(phone) { return 'p' + waNumber(phone) + '@example.com'; }
+
+  // Creates the login account. If the person started signing up before, signs them back in.
+  async function ensureAccount(phone, password) {
+    const email = authEmail(phone);
+    const up = await supabaseClient.auth.signUp({ email, password });
+    if (!up.error) {
+      if (!up.data.session) throw new Error('Account setup is not finished yet. Please tell LifeHub.');
+      return;
+    }
+    if (/already registered|already been registered/i.test(up.error.message)) {
+      const si = await supabaseClient.auth.signInWithPassword({ email, password });
+      if (si.error) throw new Error('This phone number already has an account. Please log in on the dashboard page.');
+      const { data: existing } = await supabaseClient
+        .from('artisans').select('id').eq('user_id', si.data.user.id).maybeSingle();
+      if (existing) throw new Error('This phone number already has a LifeHub listing. Please log in on the dashboard page.');
+      return;
+    }
+    throw up.error;
+  }
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -151,11 +180,19 @@
         ? tradeOtherInput.value.trim()
         : (tradeInput ? tradeInput.value : null);
 
+      const phoneValue = form.phone.value.trim();
+      const pw = form.password.value;
+      if (waNumber(phoneValue).length < 10) throw new Error('Please enter a valid phone number.');
+      if (pw.length < 8) throw new Error('Your password must be at least 8 characters.');
+      if (pw !== form.password2.value) throw new Error('The two passwords are not the same.');
+
+      await ensureAccount(phoneValue, pw);
+
       const photoUrls = selectedFiles.length ? await uploadPhotos() : [];
 
       const { error } = await supabaseClient.from('artisans').insert({
         full_name: form.fullName.value.trim(),
-        phone: form.phone.value.trim(),
+        phone: phoneValue,
         email: form.email.value.trim() || null,
         trade: tradeValue,
         area: form.area.value.trim(),
@@ -171,7 +208,8 @@
       successState.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } catch (err) {
       console.error('Signup submission failed:', err);
-      alert('Something went wrong submitting your details. Please check your connection and try again.');
+      const known = err && err.message && !/fetch|network|JWT|PGRST|violates|row-level/i.test(err.message);
+      alert(known ? err.message : 'Something went wrong submitting your details. Please check your connection and try again.');
       submitBtn.disabled = false;
       submitBtn.textContent = originalBtnText;
     }

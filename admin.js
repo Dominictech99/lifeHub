@@ -17,11 +17,17 @@
 
   // ---------- AUTH ----------
 
+  async function isAdminUser() {
+    const { data, error } = await supabaseClient.rpc('is_admin');
+    return !error && data === true;
+  }
+
   async function checkSession() {
     const { data } = await supabaseClient.auth.getSession();
-    if (data.session) {
+    if (data.session && (await isAdminUser())) {
       showDashboard();
     } else {
+      if (data.session) await supabaseClient.auth.signOut();
       showLogin();
     }
   }
@@ -51,6 +57,13 @@
 
     if (error) {
       loginError.textContent = 'Sign-in failed — check your email and password.';
+      loginError.style.display = 'block';
+      return;
+    }
+
+    if (!(await isAdminUser())) {
+      await supabaseClient.auth.signOut();
+      loginError.textContent = 'This account is not an admin.';
       loginError.style.display = 'block';
       return;
     }
@@ -156,7 +169,8 @@
           ${a.status !== 'approved' ? `<button class="btn btn-small btn-approve" data-id="${a.id}" data-action="approved">Approve</button>` : ''}
           ${a.status !== 'rejected' ? `<button class="btn btn-small btn-reject" data-id="${a.id}" data-action="rejected">Reject</button>` : ''}
           ${a.status !== 'pending' ? `<button class="btn btn-small btn-reject" data-id="${a.id}" data-action="pending">Back to pending</button>` : ''}
-          ${a.status === 'approved' ? `<button class="btn btn-small btn-approve" data-id="${a.id}" data-action="copylink">Copy availability link</button>` : ''}
+          ${a.status === 'approved' && !a.user_id ? `<button class="btn btn-small btn-approve" data-id="${a.id}" data-action="copylink">Copy dashboard setup link</button>` : ''}
+          ${a.user_id ? `<span class="admin-meta" style="font-size:12.5px;">✓ Has dashboard</span>` : ''}
           <button class="btn btn-small btn-delete" data-id="${a.id}" data-action="delete">Delete</button>
         </div>
       `;
@@ -176,9 +190,9 @@
       const { data: tk, error: tkErr } = await supabaseClient
         .from('artisan_tokens').select('token').eq('artisan_id', id).single();
       btn.disabled = false;
-      if (tkErr || !tk) { alert('Could not find a link for this artisan. Did you run availability.sql?'); return; }
-      const link = `${location.origin}/available.html?t=${tk.token}`;
-      try { await navigator.clipboard.writeText(link); alert('Link copied. Send it to the artisan on WhatsApp:\n\n' + link); }
+      if (tkErr || !tk) { alert('Could not find a setup link for this artisan. Did you run availability.sql and accounts_and_chat.sql?'); return; }
+      const link = `${location.origin}/dashboard.html?claim=${tk.token}`;
+      try { await navigator.clipboard.writeText(link); alert('Setup link copied. Send it to the artisan on WhatsApp. They use it once to create their password:\n\n' + link); }
       catch (e2) { prompt('Copy this link and send it to the artisan:', link); }
       return;
     }

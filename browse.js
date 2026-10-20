@@ -177,7 +177,8 @@
           ${ratingHtml}
           <div class="artisan-meta">${safeArea} · ${safeYears}</div>
           <p class="artisan-bio">${safeBio}</p>
-          <button class="btn btn-secondary artisan-contact" type="button" data-phone="${safePhone}" data-first-name="${safeFirstName}" data-trade="${safeTrade}" data-artisan-id="${escapeHtml(a.id)}">Contact ${safeFirstName}</button>
+          <button class="btn btn-primary artisan-chat" type="button" data-artisan-id="${escapeHtml(a.id)}" data-name="${safeName}">Chat with ${safeFirstName}</button>
+          <button class="btn btn-secondary artisan-contact" type="button" data-phone="${safePhone}" data-first-name="${safeFirstName}" data-trade="${safeTrade}" data-artisan-id="${escapeHtml(a.id)}">WhatsApp ${safeFirstName}</button>
           <a href="artisan.html?id=${encodeURIComponent(a.id)}" class="review-link">View full profile</a>
           <a href="review.html?artisan_id=${encodeURIComponent(a.id)}&artisan_name=${encodeURIComponent(a.full_name || '')}" class="review-link">Leave a review</a>
           <a href="contact.html?report=${encodeURIComponent(a.full_name || '')}" class="report-link">Report this listing</a>
@@ -192,6 +193,11 @@
   }
 
   grid.addEventListener('click', async (e) => {
+    const chatBtn = e.target.closest('.artisan-chat');
+    if (chatBtn) {
+      if (window.LifeHubChat) LifeHubChat.open({ artisanId: chatBtn.dataset.artisanId, artisanName: chatBtn.dataset.name });
+      return;
+    }
     const btn = e.target.closest('.artisan-contact');
     if (!btn) return;
     const phone = btn.dataset.phone;

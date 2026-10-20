@@ -97,6 +97,18 @@
               </div>
             </div>
 
+            <div class="form-row">
+              <div class="form-group">
+                <label for="password">Create a password <span class="optional">(at least 8 characters)</span></label>
+                <input type="password" id="password" name="password" autocomplete="new-password" minlength="8" required>
+              </div>
+              <div class="form-group">
+                <label for="password2">Type it again</label>
+                <input type="password" id="password2" name="password2" autocomplete="new-password" minlength="8" required>
+              </div>
+            </div>
+            <p class="field-hint" style="margin:-12px 0 24px;">You will use your phone number and this password to open your LifeHub dashboard, where you reply to customers and update your profile.</p>
+
             <div class="form-group">
               <label>Trade</label>
               <div class="chip-group" id="tradeChips">
@@ -204,6 +216,7 @@
           <h2>You're in the queue</h2>
           <p>Thanks — we've received your details. We'll review your profile and reach out on the number you gave us
             once it's live.</p>
+          <p style="margin-top:18px;"><a href="dashboard.html" class="btn btn-primary">Open my dashboard</a></p>
         </div>
 
       </div>
@@ -232,6 +245,7 @@
             <a href="index.html#how">How it works</a>
             <a href="signup.html">List your business</a>
             <a href="contact.html">Contact</a>
+            <a href="#" data-install-app>Get the app</a>
             <a href="index.html">About</a>
           </div>
           <div class="footer-col">
