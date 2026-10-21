@@ -145,7 +145,14 @@
     else if (d.length === 10) d = '234' + d;
     return d;
   }
-  function authEmail(phone) { return 'p' + waNumber(phone) + '@example.com'; }
+  function authEmail(phone) {
+    const base = String(window.LIFEHUB_AUTH_BASE || '');
+    const m = base.match(/^([^@+\s]+)@([^@\s]+\.[^@\s]+)$/);
+    if (!m || /YOUR_LIFEHUB_GMAIL/i.test(base)) {
+      throw new Error('Login setup is not finished. Please tell LifeHub.');
+    }
+    return m[1] + '+p' + waNumber(phone) + '@' + m[2];
+  }
 
   // Creates the login account. If the person started signing up before, signs them back in.
   async function ensureAccount(phone, password) {

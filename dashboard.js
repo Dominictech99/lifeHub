@@ -23,7 +23,12 @@
   }
   // artisans log in with their phone number; behind the scenes it becomes a private sign-in name
   function authEmail(phone) {
-    return 'p' + waNumber(phone) + '@example.com';
+    const base = String(window.LIFEHUB_AUTH_BASE || '');
+    const m = base.match(/^([^@+\s]+)@([^@\s]+\.[^@\s]+)$/);
+    if (!m || /YOUR_LIFEHUB_GMAIL/i.test(base)) {
+      throw new Error('Login setup is not finished. Please tell LifeHub.');
+    }
+    return m[1] + '+p' + waNumber(phone) + '@' + m[2];
   }
   function el(tag, cls, text) {
     const e = document.createElement(tag);

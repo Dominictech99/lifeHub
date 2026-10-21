@@ -4,7 +4,7 @@
  * - Never touches other sites (Supabase, Google Analytics, CDNs) or the admin page
  * Bump VERSION whenever you deploy changes so visitors get fresh files.
  */
-const VERSION = 'lifehub-v7';
+const VERSION = 'lifehub-v8';
 
 const PRECACHE = [
   './',
