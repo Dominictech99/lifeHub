@@ -1,5 +1,8 @@
 User-agent: *
-Allow: /
 Disallow: /admin.html
+Disallow: /dashboard.html
+Disallow: /onboard.html
+Disallow: /available.html
+Allow: /
 
 Sitemap: https://gleaming-crumble-67d3e2.netlify.app/sitemap.xml

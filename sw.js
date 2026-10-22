@@ -14,6 +14,7 @@ const PRECACHE = [
   'styles.css',
   'script.js',
   'browse.js',
+  'loader.js',
   'supabase-config.js',
   'icons/icon-192.png'
 ];
