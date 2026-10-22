@@ -47,6 +47,7 @@
         <div class="admin-top-tab active" data-panel="artisans">Artisans</div>
         <div class="admin-top-tab" data-panel="messages">Messages <span id="msgCount"></span></div>
         <div class="admin-top-tab" data-panel="reviews">Reviews <span id="reviewCount"></span></div>
+        <div class="admin-top-tab" data-panel="stats">Stats</div>
         <div class="admin-top-tab" data-panel="leads">Leads <span id="leadCount"></span></div>
       </div>
 
@@ -83,6 +84,10 @@
       </div>
 
       <!-- LEADS PANEL -->
+      <div class="admin-panel" id="panel-stats" style="display:none;">
+        <div id="statsBox" style="padding-bottom:80px;"><p style="color:var(--text-mute);">Loading…</p></div>
+      </div>
+
       <div class="admin-panel" id="panel-leads" style="display:none;">
         <div class="status-tabs" id="leadTabs">
           <div class="status-tab active" data-source="all">All</div>

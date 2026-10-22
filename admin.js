@@ -86,10 +86,48 @@
     tab.classList.add('active');
 
     const panel = tab.dataset.panel;
-    ['artisans', 'messages', 'reviews', 'leads'].forEach((p) => {
+    ['artisans', 'messages', 'reviews', 'stats', 'leads'].forEach((p) => {
       document.getElementById(`panel-${p}`).style.display = p === panel ? 'block' : 'none';
     });
+    if (panel === 'stats') loadStats();
   });
+
+
+  // ================= STATS =================
+  async function loadStats() {
+    const box = document.getElementById('statsBox');
+    const { data, error } = await supabaseClient.rpc('admin_stats');
+    if (error) {
+      box.innerHTML = `<p style="color:#B4232C;">Couldn't load stats: ${escapeHtml(error.message)}<br>Did you run stats_and_booking.sql?</p>`;
+      return;
+    }
+    const t = data.totals, w = data.last7;
+    const card = (n, label, sub) => `<div style="background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center;"><div style="font:700 26px 'Space Grotesk',sans-serif;color:var(--ink);">${n}</div><div style="font-size:13px;color:var(--text-mute);">${label}</div>${sub ? `<div style="font-size:12px;color:var(--leaf);margin-top:2px;">${sub}</div>` : ''}</div>`;
+    const grid = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:22px;';
+    const rate = t.chats ? Math.round((t.booked / t.chats) * 100) + '% of chats' : '';
+    let html = `<h3 style="margin:0 0 10px;">Artisans</h3><div style="${grid}">
+      ${card(t.artisans, 'Total artisans')}${card(t.approved, 'Live on the site')}${card(t.pending, 'Waiting for approval')}${card(t.with_login, 'Have a dashboard login')}</div>
+      <h3 style="margin:0 0 10px;">Clients</h3><div style="${grid}">
+      ${card(t.chats, 'Clients who chatted', '+' + w.chats + ' this week')}${card(t.booked, 'Booked', rate + (w.booked ? ' · +' + w.booked + ' this week' : ''))}
+      ${card(t.replies, 'Artisan replies')}${card(t.client_msgs, 'Client messages')}${card(t.leads, 'WhatsApp / contact taps', '+' + w.leads + ' this week')}${card(t.reviews, 'Approved reviews')}</div>
+      <p style="font-size:13px;color:var(--text-mute);margin:-8px 0 22px;">“Booked” counts chats an artisan marked as booked in their dashboard. Clients who go straight to WhatsApp cannot be tracked as booked.</p>`;
+    const th = 'text-align:left;padding:8px 10px;font-size:12.5px;color:var(--text-mute);border-bottom:1px solid var(--line);white-space:nowrap;';
+    const td = 'padding:10px;font-size:14px;border-bottom:1px solid var(--line);';
+    html += `<h3 style="margin:0 0 10px;">Per artisan</h3><div style="overflow-x:auto;background:#fff;border:1px solid var(--line);border-radius:12px;margin-bottom:22px;"><table style="width:100%;border-collapse:collapse;min-width:560px;"><tr>
+      <th style="${th}">Artisan</th><th style="${th}">Chats</th><th style="${th}">Replies</th><th style="${th}">Booked</th><th style="${th}">Taps</th><th style="${th}">Reviews</th></tr>`;
+    (data.artisans || []).forEach((a) => {
+      const flag = a.chats > 0 && a.replies === 0 ? ' <span style="color:#B4232C;font-size:12px;">no reply yet</span>' : '';
+      html += `<tr><td style="${td}"><b>${escapeHtml(a.full_name)}</b><br><span style="font-size:12.5px;color:var(--text-mute);">${escapeHtml(a.trade || '')} · ${a.status === 'approved' ? 'live' : escapeHtml(a.status)}${a.has_login ? '' : ' · no login yet'}</span></td>
+        <td style="${td}">${a.chats}${flag}</td><td style="${td}">${a.replies}</td><td style="${td}">${a.booked}</td><td style="${td}">${a.leads}</td><td style="${td}">${a.reviews}</td></tr>`;
+    });
+    html += `</table></div>`;
+    if ((data.onboarders || []).length) {
+      html += `<h3 style="margin:0 0 10px;">Onboarders</h3><div style="overflow-x:auto;background:#fff;border:1px solid var(--line);border-radius:12px;"><table style="width:100%;border-collapse:collapse;"><tr><th style="${th}">Name</th><th style="${th}">Artisans added</th><th style="${th}">Approved</th></tr>`;
+      data.onboarders.forEach((o) => { html += `<tr><td style="${td}"><b>${escapeHtml(o.name || '—')}</b></td><td style="${td}">${o.added}</td><td style="${td}">${o.approved}</td></tr>`; });
+      html += `</table></div>`;
+    }
+    box.innerHTML = html;
+  }
 
   // ================= ARTISANS =================
 
@@ -170,7 +208,7 @@
           ${a.status !== 'rejected' ? `<button class="btn btn-small btn-reject" data-id="${a.id}" data-action="rejected">Reject</button>` : ''}
           ${a.status !== 'pending' ? `<button class="btn btn-small btn-reject" data-id="${a.id}" data-action="pending">Back to pending</button>` : ''}
           ${a.status === 'approved' && !a.user_id ? `<button class="btn btn-small btn-approve" data-id="${a.id}" data-action="copylink">Copy dashboard setup link</button>` : ''}
-          ${a.user_id ? `<span class="admin-meta" style="font-size:12.5px;">✓ Has dashboard</span>` : ''}
+          ${a.user_id ? `<span class="admin-meta" style="font-size:12.5px;">✓ Has dashboard</span><button class="btn btn-small btn-reject" data-id="${a.id}" data-action="resetpw">Reset password</button>` : ''}
           <button class="btn btn-small btn-delete" data-id="${a.id}" data-action="delete">Delete</button>
         </div>
       `;
@@ -185,6 +223,20 @@
     const id = btn.dataset.id;
     const action = btn.dataset.action;
     btn.disabled = true;
+
+    if (action === 'resetpw') {
+      const words = ['Hub', 'Lagos', 'Gold', 'Star', 'Neat', 'Work'];
+      const r = crypto.getRandomValues(new Uint32Array(2));
+      const suggested = words[r[0] % words.length] + String(100000 + (r[1] % 900000));
+      const pw = prompt('Set a temporary password for this artisan (at least 8 characters).\nLeave it as it is to use the one suggested. Then send it to them on WhatsApp.', suggested);
+      if (pw === null) { btn.disabled = false; return; }
+      const { error: pwErr } = await supabaseClient.rpc('admin_reset_artisan_password', { p_artisan_id: id, p_new_password: pw.trim() });
+      btn.disabled = false;
+      if (pwErr) { alert('Could not reset the password: ' + pwErr.message + '\n\nDid you run password_reset.sql?'); return; }
+      try { await navigator.clipboard.writeText(pw.trim()); } catch (e4) {}
+      alert('Done. The temporary password is:\n\n' + pw.trim() + '\n\nSend it to the artisan on WhatsApp. They log in with their phone number and this password, then change it under Profile.');
+      return;
+    }
 
     if (action === 'copylink') {
       const { data: tk, error: tkErr } = await supabaseClient

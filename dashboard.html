@@ -126,7 +126,7 @@
     </form>
     <div class="auth-links">
       Already listed but never set a password? Use the setup link we sent you on WhatsApp.<br>
-      Forgot your password? <a href="contact.html">Tell us</a> and we will reset it.<br>
+      Forgot your password? Send LifeHub a WhatsApp message and we will give you a temporary one.<br>
       New here? <a href="signup.html">List your work</a>
     </div>
   </section>
@@ -174,7 +174,7 @@
       <div class="chat-layout" id="chatLayout">
         <div class="conv-list" id="convList"></div>
         <div class="thread" id="thread">
-          <div class="thread-head"><button type="button" class="back" id="threadBack" aria-label="Back">←</button><span id="threadTitle"></span></div>
+          <div class="thread-head"><button type="button" class="back" id="threadBack" aria-label="Back">←</button><span id="threadTitle" style="flex:1"></span><button type="button" class="btn btn-small" id="bookedBtn">Mark as booked</button></div>
           <div class="msgs" id="msgs"></div>
           <form class="composer" id="composer">
             <textarea id="composerText" maxlength="1000" placeholder="Write a reply…" rows="1"></textarea>
@@ -255,6 +255,20 @@
           <input type="file" id="photoInput" accept="image/*" multiple hidden>
         </div>
         <button type="submit" class="btn btn-primary" id="saveProfile">Save changes</button>
+      </form>
+
+      <form class="card" id="passwordForm" novalidate style="margin-top:18px;">
+        <div id="pwMsg" hidden></div>
+        <div class="form-group">
+          <label for="pwNew">Change your password</label>
+          <input type="password" id="pwNew" autocomplete="new-password" minlength="8">
+          <p class="field-hint">At least 8 characters. Use this if LifeHub gave you a temporary password.</p>
+        </div>
+        <div class="form-group">
+          <label for="pwNew2">Repeat the new password</label>
+          <input type="password" id="pwNew2" autocomplete="new-password" minlength="8">
+        </div>
+        <button type="submit" class="btn btn-secondary" id="savePw">Change password</button>
       </form>
     </div>
   </section>

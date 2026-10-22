@@ -324,7 +324,7 @@
   async function loadConversations(first) {
     const { data, error } = await supabaseClient
       .from('conversations')
-      .select('id, client_name, created_at, last_message_at, artisan_unread')
+      .select('id, client_name, created_at, last_message_at, artisan_unread, booked_at')
       .order('last_message_at', { ascending: false });
     if (error) return;
     convs = data || [];
@@ -394,9 +394,25 @@
     $('thread').style.display = '';
     const c = convs.find((x) => x.id === id);
     $('threadTitle').textContent = c ? c.client_name : 'Chat';
+    paintBooked(c);
     await loadThread(id, true);
     renderConvList();
   }
+
+  function paintBooked(c) {
+    const b = $('bookedBtn');
+    b.textContent = c && c.booked_at ? '✓ Booked (undo)' : 'Mark as booked';
+    b.className = 'btn btn-small' + (c && c.booked_at ? ' btn-on' : '');
+  }
+  $('bookedBtn').addEventListener('click', async () => {
+    const c = convs.find((x) => x.id === activeConvId);
+    if (!c) return;
+    const want = !c.booked_at;
+    const { error } = await supabaseClient.rpc('artisan_set_booked', { p_conversation_id: c.id, p_booked: want });
+    if (error) { alert(friendly(error)); return; }
+    c.booked_at = want ? new Date().toISOString() : null;
+    paintBooked(c);
+  });
 
   $('threadBack').addEventListener('click', () => {
     activeConvId = null;
@@ -534,6 +550,23 @@
     artisan.bio = $('pfBio').value.trim(); artisan.area = $('pfArea').value.trim(); artisan.years_experience = $('pfYears').value;
     artisan.photo_urls = photos.slice();
     renderHeader();
+  });
+
+  $('passwordForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const msg = $('pwMsg');
+    const p1 = $('pwNew').value;
+    const p2 = $('pwNew2').value;
+    msg.hidden = false;
+    if (p1.length < 8) { msg.className = 'form-error'; msg.textContent = 'Your password must be at least 8 characters.'; return; }
+    if (p1 !== p2) { msg.className = 'form-error'; msg.textContent = 'The two passwords are not the same.'; return; }
+    const btn = $('savePw');
+    btn.disabled = true; btn.textContent = 'Saving…';
+    const { error } = await supabaseClient.auth.updateUser({ password: p1 });
+    btn.disabled = false; btn.textContent = 'Change password';
+    if (error) { msg.className = 'form-error'; msg.textContent = friendly(error); return; }
+    msg.className = 'form-ok'; msg.textContent = 'Done. Use your new password the next time you log in.';
+    $('pwNew').value = ''; $('pwNew2').value = '';
   });
 
   init();
